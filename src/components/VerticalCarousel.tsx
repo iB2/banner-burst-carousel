@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 interface Banner {
@@ -36,12 +35,14 @@ const VerticalCarousel: React.FC = () => {
 
   useEffect(() => {
     let progressInterval: NodeJS.Timeout;
-    let slideInterval: NodeJS.Timeout;
-    let waitingTimeout: NodeJS.Timeout;
+    let bannerChangeTimeout1: NodeJS.Timeout;
+    let bannerChangeTimeout2: NodeJS.Timeout;
+    let resetTimeout: NodeJS.Timeout;
 
     const startProgress = () => {
       setProgress(0);
       setIsWaiting(false);
+      setCurrentIndex(0);
       
       // Animate progress from 0 to 100 over 10 seconds
       progressInterval = setInterval(() => {
@@ -53,28 +54,32 @@ const VerticalCarousel: React.FC = () => {
         });
       }, 100);
 
-      // Change slide after 10 seconds or wait if it's the last slide
-      slideInterval = setTimeout(() => {
-        if (currentIndex === banners.length - 1) {
-          // Last banner - wait 5 seconds before resetting
-          setIsWaiting(true);
-          waitingTimeout = setTimeout(() => {
-            setCurrentIndex(0);
-          }, 5000);
-        } else {
-          setCurrentIndex((prevIndex) => prevIndex + 1);
-        }
+      // Change to second banner after 5 seconds (50% progress)
+      bannerChangeTimeout1 = setTimeout(() => {
+        setCurrentIndex(1);
+      }, 5000);
+
+      // Change to third banner after 10 seconds (100% progress)
+      bannerChangeTimeout2 = setTimeout(() => {
+        setCurrentIndex(2);
+        setIsWaiting(true);
       }, 10000);
+
+      // Reset after 15 seconds total (10s progress + 5s waiting)
+      resetTimeout = setTimeout(() => {
+        startProgress();
+      }, 15000);
     };
 
     startProgress();
 
     return () => {
       clearInterval(progressInterval);
-      clearTimeout(slideInterval);
-      clearTimeout(waitingTimeout);
+      clearTimeout(bannerChangeTimeout1);
+      clearTimeout(bannerChangeTimeout2);
+      clearTimeout(resetTimeout);
     };
-  }, [currentIndex]);
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-8">
@@ -95,27 +100,18 @@ const VerticalCarousel: React.FC = () => {
                 />
               </div>
               
-              {/* Quadrados posicionados sobre a barra */}
+              {/* Quadrados posicionados sobre a barra - sempre laranja */}
               <div className="absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-col justify-between" style={{ height: '240px' }}>
-                {banners.map((banner, index) => {
-                  const isActive = index === currentIndex;
-                  const isPassed = index < currentIndex;
-                  
-                  return (
-                    <div
-                      key={banner.id}
-                      className={`w-3 h-3 rounded-sm border-2 transition-all duration-300 ${
-                        isActive || isPassed
-                          ? 'border-capiva-orange bg-capiva-orange'
-                          : 'border-gray-300 bg-white'
-                      }`}
-                      style={{
-                        marginTop: index === 0 ? '-6px' : undefined,
-                        marginBottom: index === banners.length - 1 ? '-6px' : undefined
-                      }}
-                    />
-                  );
-                })}
+                {banners.map((banner, index) => (
+                  <div
+                    key={banner.id}
+                    className="w-3 h-3 rounded-sm border-2 border-capiva-orange bg-capiva-orange"
+                    style={{
+                      marginTop: index === 0 ? '-6px' : undefined,
+                      marginBottom: index === banners.length - 1 ? '-6px' : undefined
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </div>
