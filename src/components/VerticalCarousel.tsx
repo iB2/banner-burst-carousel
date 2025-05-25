@@ -105,16 +105,16 @@ const VerticalCarousel: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-7xl mx-auto">
-        {/* Container principal em 3 colunas */}
-        <div className="grid grid-cols-12 gap-4 items-center min-h-screen px-4">
+    <div className="flex items-center justify-center bg-gray-50" style={{ minHeight: '150vh' }}>
+      <div className="w-full max-w-none mx-auto px-2">
+        {/* Container principal em 3 colunas - melhor uso do espaço horizontal */}
+        <div className="grid grid-cols-12 gap-2 items-center px-2" style={{ minHeight: '150vh' }}>
           
-          {/* Coluna 1: Timer e sistema de transição - reduzido padding */}
-          <div className="col-span-1 flex justify-center">
+          {/* Coluna 1: Timer e sistema de transição - margem ainda menor */}
+          <div className="col-span-1 flex justify-start pl-2">
             <div className="relative">
-              {/* Barra vertical laranja */}
-              <div className="relative w-1 bg-gray-200 rounded-full overflow-hidden" style={{ height: '240px' }}>
+              {/* Barra vertical laranja - altura aumentada */}
+              <div className="relative w-1 bg-gray-200 rounded-full overflow-hidden" style={{ height: '360px' }}>
                 <div 
                   className="absolute top-0 left-0 w-full bg-capiva-orange rounded-full transition-all duration-100 ease-linear"
                   style={{
@@ -124,7 +124,7 @@ const VerticalCarousel: React.FC = () => {
               </div>
               
               {/* Quadrados posicionados sobre a barra - sempre laranja */}
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-col justify-between" style={{ height: '240px' }}>
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-col justify-between" style={{ height: '360px' }}>
                 {banners.map((banner, index) => (
                   <div
                     key={banner.id}
@@ -139,8 +139,8 @@ const VerticalCarousel: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 2: Conteúdo de texto e botão - aumentado padding */}
-          <div className="col-span-5 space-y-8 pl-4">
+          {/* Coluna 2: Conteúdo de texto e botão - mais espaço */}
+          <div className="col-span-6 space-y-8 pl-2 pr-4">
             <div className="space-y-6">
               <div className="text-sm text-capiva-orange font-semibold uppercase tracking-wider">
                 {currentIndex === 0 && "AUTOMAÇÃO QUE TRANSFORMA"}
@@ -149,34 +149,34 @@ const VerticalCarousel: React.FC = () => {
               </div>
               
               <div className="space-y-2">
-                <h1 className="text-5xl font-bold text-gray-900 leading-tight">
+                <h1 className="text-6xl font-bold text-gray-900 leading-tight">
                   {banners[currentIndex].title}
                 </h1>
-                <h2 className="text-5xl font-bold text-gray-900 leading-tight">
+                <h2 className="text-6xl font-bold text-gray-900 leading-tight">
                   {banners[currentIndex].subtitle}
                 </h2>
                 {banners[currentIndex].id === 1 && (
-                  <h3 className="text-5xl font-bold text-gray-900 leading-tight">
+                  <h3 className="text-6xl font-bold text-gray-900 leading-tight">
                     {banners[currentIndex].description}
                   </h3>
                 )}
               </div>
               
               {banners[currentIndex].id !== 1 && (
-                <p className="text-lg text-gray-600 max-w-lg leading-relaxed">
+                <p className="text-xl text-gray-600 max-w-2xl leading-relaxed">
                   {banners[currentIndex].description}
                 </p>
               )}
               
-              <button className="bg-capiva-orange hover:bg-capiva-orange-dark text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200">
+              <button className="bg-capiva-orange hover:bg-capiva-orange-dark text-white px-10 py-4 rounded-lg font-semibold transition-colors duration-200 text-lg">
                 QUERO TRANSFORMAR
               </button>
             </div>
           </div>
 
-          {/* Coluna 3: Imagem ilustrativa */}
-          <div className="col-span-6 flex justify-center items-center">
-            <div className="w-full h-96 relative overflow-hidden rounded-2xl shadow-2xl">
+          {/* Coluna 3: Imagem ilustrativa - mais espaço */}
+          <div className="col-span-5 flex justify-center items-center">
+            <div className="w-full h-[500px] relative overflow-hidden rounded-2xl shadow-2xl">
               <img 
                 src={banners[currentIndex].image}
                 alt={`Ilustração ${banners[currentIndex].title}`}
