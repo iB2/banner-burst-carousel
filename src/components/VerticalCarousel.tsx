@@ -91,18 +91,20 @@ const VerticalCarousel: React.FC = () => {
     };
   }, []);
   return <div className="flex items-center justify-center bg-gray-50" style={{
-    minHeight: '150vh'
+    minHeight: '100vh'
   }}>
-      <div className="w-full max-w-none mx-auto px-2">
-        {/* Container principal em 3 colunas - melhor uso do espaço horizontal */}
-        <div className="grid grid-cols-12 gap-2 items-center px-2" style={{
-        minHeight: '150vh'
+      <div className="w-full max-w-none mx-auto px-4">
+        {/* Container principal em 3 colunas com alturas definidas e espaçamento otimizado */}
+        <div className="grid grid-cols-12 gap-1 items-stretch" style={{
+        minHeight: '100vh'
       }}>
           
-          {/* Coluna 1: Timer e sistema de transição - margem ainda menor */}
-          <div className="col-span-1 flex justify-start pl-2 px-px">
+          {/* Coluna 1: Timer e sistema de transição - largura reduzida */}
+          <div className="col-span-1 flex justify-center items-center" style={{
+            minHeight: '100vh'
+          }}>
             <div className="relative">
-              {/* Barra vertical laranja - altura aumentada */}
+              {/* Barra vertical laranja */}
               <div className="relative w-1 bg-gray-200 rounded-full overflow-hidden" style={{
               height: '360px'
             }}>
@@ -111,7 +113,7 @@ const VerticalCarousel: React.FC = () => {
               }} />
               </div>
               
-              {/* Quadrados posicionados sobre a barra - sempre laranja */}
+              {/* Quadrados posicionados sobre a barra */}
               <div className="absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-col justify-between" style={{
               height: '360px'
             }}>
@@ -123,8 +125,10 @@ const VerticalCarousel: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 2: Conteúdo de texto e botão - mais espaço */}
-          <div className="col-span-6 space-y-8 pl-2 pr-4">
+          {/* Coluna 2: Conteúdo de texto e botão - espaçamento otimizado */}
+          <div className="col-span-6 flex flex-col justify-center space-y-8 pl-4 pr-8" style={{
+            minHeight: '100vh'
+          }}>
             <div className="space-y-6">
               <div className="text-sm text-capiva-orange font-semibold uppercase tracking-wider">
                 {currentIndex === 0 && "AUTOMAÇÃO QUE TRANSFORMA"}
@@ -154,8 +158,10 @@ const VerticalCarousel: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 3: Imagem ilustrativa - mais espaço */}
-          <div className="col-span-5 flex justify-center items-center">
+          {/* Coluna 3: Imagem ilustrativa - altura definida */}
+          <div className="col-span-5 flex justify-center items-center" style={{
+            minHeight: '100vh'
+          }}>
             <div className="w-full h-[500px] relative overflow-hidden rounded-2xl shadow-2xl">
               <img src={banners[currentIndex].image} alt={`Ilustração ${banners[currentIndex].title}`} className="w-full h-full object-cover" />
               {/* Overlay para melhor legibilidade se necessário */}
