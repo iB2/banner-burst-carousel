@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,11 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				capiva: {
+					orange: '#F59E0B',
+					'orange-dark': '#D97706',
+					'orange-light': '#FCD34D'
 				}
 			},
 			borderRadius: {
@@ -84,11 +90,20 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'progress-fill': {
+					'0%': {
+						transform: 'scaleY(0)'
+					},
+					'100%': {
+						transform: 'scaleY(1)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'progress-fill': 'progress-fill 5s linear forwards'
 			}
 		}
 	},
