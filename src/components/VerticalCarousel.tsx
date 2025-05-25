@@ -93,14 +93,15 @@ const VerticalCarousel: React.FC = () => {
   return <div className="flex items-center justify-center bg-gray-50" style={{
     minHeight: '100vh'
   }}>
-      <div className="w-full max-w-none mx-auto px-4">
-        {/* Container principal em 3 colunas com alturas definidas e espaçamento otimizado */}
-        <div className="grid grid-cols-12 gap-1 items-stretch" style={{
+      <div className="w-full max-w-none mx-auto">
+        {/* Container flexível para controle preciso do espaçamento */}
+        <div className="flex items-stretch" style={{
         minHeight: '100vh'
       }}>
           
-          {/* Coluna 1: Timer e sistema de transição - largura reduzida */}
-          <div className="col-span-1 flex justify-center items-center" style={{
+          {/* Coluna 1: Timer - largura mínima, alinhado à esquerda */}
+          <div className="flex justify-start items-center pl-4" style={{
+            width: '60px',
             minHeight: '100vh'
           }}>
             <div className="relative">
@@ -125,9 +126,12 @@ const VerticalCarousel: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 2: Conteúdo de texto e botão - espaçamento otimizado */}
-          <div className="col-span-6 flex flex-col justify-center space-y-8 pl-4 pr-8" style={{
-            minHeight: '100vh'
+          {/* Coluna 2: Conteúdo de texto e botão - 50% do espaço restante */}
+          <div className="flex flex-col justify-center space-y-8" style={{
+            width: 'calc((100vw - 60px - 10px) / 2)',
+            minHeight: '100vh',
+            paddingLeft: '10px',
+            paddingRight: '20px'
           }}>
             <div className="space-y-6">
               <div className="text-sm text-capiva-orange font-semibold uppercase tracking-wider">
@@ -158,9 +162,12 @@ const VerticalCarousel: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 3: Imagem ilustrativa - altura definida */}
-          <div className="col-span-5 flex justify-center items-center" style={{
-            minHeight: '100vh'
+          {/* Coluna 3: Imagem ilustrativa - 50% do espaço restante */}
+          <div className="flex justify-center items-center" style={{
+            width: 'calc((100vw - 60px - 10px) / 2)',
+            minHeight: '100vh',
+            paddingLeft: '20px',
+            paddingRight: '20px'
           }}>
             <div className="w-full h-[500px] relative overflow-hidden rounded-2xl shadow-2xl">
               <img src={banners[currentIndex].image} alt={`Ilustração ${banners[currentIndex].title}`} className="w-full h-full object-cover" />
