@@ -108,9 +108,9 @@ const VerticalCarousel: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-7xl mx-auto">
         {/* Container principal em 3 colunas */}
-        <div className="grid grid-cols-12 gap-8 items-center min-h-screen px-8">
+        <div className="grid grid-cols-12 gap-4 items-center min-h-screen px-4">
           
-          {/* Coluna 1: Timer e sistema de transição */}
+          {/* Coluna 1: Timer e sistema de transição - reduzido padding */}
           <div className="col-span-1 flex justify-center">
             <div className="relative">
               {/* Barra vertical laranja */}
@@ -139,8 +139,8 @@ const VerticalCarousel: React.FC = () => {
             </div>
           </div>
 
-          {/* Coluna 2: Conteúdo de texto e botão */}
-          <div className="col-span-5 space-y-8 pl-8">
+          {/* Coluna 2: Conteúdo de texto e botão - aumentado padding */}
+          <div className="col-span-5 space-y-8 pl-4">
             <div className="space-y-6">
               <div className="text-sm text-capiva-orange font-semibold uppercase tracking-wider">
                 {currentIndex === 0 && "AUTOMAÇÃO QUE TRANSFORMA"}
