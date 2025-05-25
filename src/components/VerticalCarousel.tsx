@@ -6,7 +6,6 @@ interface Banner {
   title: string;
   subtitle: string;
   description: string;
-  icon: string;
 }
 
 const banners: Banner[] = [
@@ -14,89 +13,105 @@ const banners: Banner[] = [
     id: 1,
     title: "Inteligência,",
     subtitle: "automação e",
-    description: "eficiência",
-    icon: "🚀"
+    description: "eficiência"
   },
   {
     id: 2,
     title: "Integração, dados e",
     subtitle: "agilidade",
-    description: "Fazemos seus sistemas e processos trabalharem juntos",
-    icon: "⚡"
+    description: "Fazemos seus sistemas e processos trabalharem juntos"
   },
   {
     id: 3,
     title: "Consultoria",
     subtitle: "estratégica e novos",
-    description: "produtos",
-    icon: "💡"
+    description: "produtos"
   }
 ];
 
 const VerticalCarousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIsAnimating(true);
+    let progressInterval: NodeJS.Timeout;
+    let slideInterval: NodeJS.Timeout;
+
+    const startProgress = () => {
       setProgress(0);
       
-      // Start progress animation
-      setTimeout(() => {
-        setProgress(100);
-      }, 50);
-      
+      // Animate progress from 0 to 100 over 5 seconds
+      progressInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            return 100;
+          }
+          return prev + (100 / 50); // 50 steps for smooth animation (5000ms / 100ms)
+        });
+      }, 100);
+
       // Change slide after 5 seconds
-      setTimeout(() => {
+      slideInterval = setTimeout(() => {
         setCurrentIndex((prevIndex) => {
           const nextIndex = (prevIndex + 1) % banners.length;
           return nextIndex;
         });
-        setIsAnimating(false);
       }, 5000);
-      
+    };
+
+    startProgress();
+
+    // Restart the cycle every 5 seconds
+    const mainInterval = setInterval(() => {
+      startProgress();
     }, 5000);
 
-    // Initial animation
-    setIsAnimating(true);
-    setTimeout(() => setProgress(100), 50);
-
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      clearInterval(progressInterval);
+      clearTimeout(slideInterval);
+      clearInterval(mainInterval);
+    };
+  }, [currentIndex]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-8">
       <div className="flex w-full max-w-6xl gap-8 items-center">
         {/* Left side content */}
         <div className="flex-1 space-y-8">
-          {/* Progress indicators */}
-          <div className="flex items-center gap-4">
-            <div className="relative w-1 h-64 bg-gray-200 rounded-full overflow-hidden">
+          {/* Progress indicators - Visual único */}
+          <div className="flex items-start gap-0">
+            {/* Barra vertical laranja */}
+            <div className="relative w-1 bg-gray-200 rounded-full overflow-hidden" style={{ height: '240px' }}>
               <div 
-                className="absolute bottom-0 left-0 w-full bg-capiva-orange rounded-full transition-transform duration-[5000ms] ease-linear origin-bottom"
+                className="absolute top-0 left-0 w-full bg-capiva-orange rounded-full transition-all duration-100 ease-linear"
                 style={{
-                  transform: `scaleY(${progress / 100})`,
-                  transformOrigin: 'bottom'
+                  height: `${progress}%`,
                 }}
               />
             </div>
             
-            {/* Banner indicators */}
-            <div className="space-y-4">
-              {banners.map((banner, index) => (
-                <div
-                  key={banner.id}
-                  className={`w-12 h-12 rounded-lg border-2 flex items-center justify-center text-xl transition-all duration-300 ${
-                    index === currentIndex
-                      ? 'border-capiva-orange bg-capiva-orange text-white'
-                      : 'border-gray-300 bg-white text-gray-400'
-                  }`}
-                >
-                  {banner.icon}
-                </div>
-              ))}
+            {/* Quadrados como checkpoints conectados à barra */}
+            <div className="flex flex-col justify-between ml-4" style={{ height: '240px' }}>
+              {banners.map((banner, index) => {
+                const isActive = index === currentIndex;
+                const isPassed = index < currentIndex;
+                const isInProgress = index === currentIndex && progress > 0;
+                
+                return (
+                  <div
+                    key={banner.id}
+                    className={`w-12 h-12 rounded-lg border-2 transition-all duration-300 ${
+                      isActive || isPassed
+                        ? 'border-capiva-orange bg-capiva-orange'
+                        : 'border-gray-300 bg-white'
+                    }`}
+                    style={{
+                      marginTop: index === 0 ? '0px' : undefined,
+                      marginBottom: index === banners.length - 1 ? '0px' : undefined
+                    }}
+                  />
+                );
+              })}
             </div>
           </div>
 
