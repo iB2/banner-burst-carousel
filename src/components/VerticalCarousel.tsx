@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 
 interface Banner {
@@ -15,21 +14,21 @@ const banners: Banner[] = [
     title: "Inteligência,",
     subtitle: "automação e",
     description: "eficiência",
-    image: "/lovable-uploads/d482456a-3ae4-4b19-bd7d-af0ddc40239b.png"
+    image: "/lovable-uploads/22e842e0-298d-4403-aff8-f09f017dacc9.png"
   },
   {
     id: 2,
     title: "Integração, dados e",
     subtitle: "agilidade",
     description: "Fazemos seus sistemas e processos trabalharem juntos",
-    image: "/lovable-uploads/d482456a-3ae4-4b19-bd7d-af0ddc40239b.png"
+    image: "/lovable-uploads/9c0e5828-1d60-4742-b05b-406daa5f27d2.png"
   },
   {
     id: 3,
     title: "Consultoria",
     subtitle: "estratégica e novos",
     description: "produtos",
-    image: "/lovable-uploads/d482456a-3ae4-4b19-bd7d-af0ddc40239b.png"
+    image: "/lovable-uploads/388dd444-936a-4239-9933-ffb4e92c8f4e.png"
   }
 ];
 
