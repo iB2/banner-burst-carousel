@@ -100,10 +100,10 @@ const VerticalCarousel: React.FC = () => {
       }}>
           
           {/* Coluna 1: Timer - largura mínima, alinhado à esquerda */}
-          <div className="flex justify-start items-center pl-4" style={{
-            width: '60px',
-            minHeight: '100vh'
-          }}>
+          <div style={{
+          width: '60px',
+          minHeight: '100vh'
+        }} className="flex justify-start items-center pl-4 px-[20px]">
             <div className="relative">
               {/* Barra vertical laranja */}
               <div className="relative w-1 bg-gray-200 rounded-full overflow-hidden" style={{
@@ -128,11 +128,11 @@ const VerticalCarousel: React.FC = () => {
 
           {/* Coluna 2: Conteúdo de texto e botão - 50% do espaço restante */}
           <div className="flex flex-col justify-center space-y-8" style={{
-            width: 'calc((100vw - 60px - 10px) / 2)',
-            minHeight: '100vh',
-            paddingLeft: '10px',
-            paddingRight: '20px'
-          }}>
+          width: 'calc((100vw - 60px - 10px) / 2)',
+          minHeight: '100vh',
+          paddingLeft: '10px',
+          paddingRight: '20px'
+        }}>
             <div className="space-y-6">
               <div className="text-sm text-capiva-orange font-semibold uppercase tracking-wider">
                 {currentIndex === 0 && "AUTOMAÇÃO QUE TRANSFORMA"}
@@ -164,11 +164,11 @@ const VerticalCarousel: React.FC = () => {
 
           {/* Coluna 3: Imagem ilustrativa - 50% do espaço restante */}
           <div className="flex justify-center items-center" style={{
-            width: 'calc((100vw - 60px - 10px) / 2)',
-            minHeight: '100vh',
-            paddingLeft: '20px',
-            paddingRight: '20px'
-          }}>
+          width: 'calc((100vw - 60px - 10px) / 2)',
+          minHeight: '100vh',
+          paddingLeft: '20px',
+          paddingRight: '20px'
+        }}>
             <div className="w-full h-[500px] relative overflow-hidden rounded-2xl shadow-2xl">
               <img src={banners[currentIndex].image} alt={`Ilustração ${banners[currentIndex].title}`} className="w-full h-full object-cover" />
               {/* Overlay para melhor legibilidade se necessário */}
