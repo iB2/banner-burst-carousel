@@ -32,44 +32,47 @@ const banners: Banner[] = [
 const VerticalCarousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [isWaiting, setIsWaiting] = useState(false);
 
   useEffect(() => {
     let progressInterval: NodeJS.Timeout;
     let slideInterval: NodeJS.Timeout;
+    let waitingTimeout: NodeJS.Timeout;
 
     const startProgress = () => {
       setProgress(0);
+      setIsWaiting(false);
       
-      // Animate progress from 0 to 100 over 5 seconds
+      // Animate progress from 0 to 100 over 10 seconds
       progressInterval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 100) {
             return 100;
           }
-          return prev + (100 / 50); // 50 steps for smooth animation (5000ms / 100ms)
+          return prev + (100 / 100); // 100 steps for smooth animation (10000ms / 100ms)
         });
       }, 100);
 
-      // Change slide after 5 seconds
+      // Change slide after 10 seconds or wait if it's the last slide
       slideInterval = setTimeout(() => {
-        setCurrentIndex((prevIndex) => {
-          const nextIndex = (prevIndex + 1) % banners.length;
-          return nextIndex;
-        });
-      }, 5000);
+        if (currentIndex === banners.length - 1) {
+          // Last banner - wait 5 seconds before resetting
+          setIsWaiting(true);
+          waitingTimeout = setTimeout(() => {
+            setCurrentIndex(0);
+          }, 5000);
+        } else {
+          setCurrentIndex((prevIndex) => prevIndex + 1);
+        }
+      }, 10000);
     };
 
     startProgress();
 
-    // Restart the cycle every 5 seconds
-    const mainInterval = setInterval(() => {
-      startProgress();
-    }, 5000);
-
     return () => {
       clearInterval(progressInterval);
       clearTimeout(slideInterval);
-      clearInterval(mainInterval);
+      clearTimeout(waitingTimeout);
     };
   }, [currentIndex]);
 
@@ -80,38 +83,40 @@ const VerticalCarousel: React.FC = () => {
         <div className="flex-1 space-y-8">
           {/* Progress indicators - Visual único */}
           <div className="flex items-start gap-0">
-            {/* Barra vertical laranja */}
-            <div className="relative w-1 bg-gray-200 rounded-full overflow-hidden" style={{ height: '240px' }}>
-              <div 
-                className="absolute top-0 left-0 w-full bg-capiva-orange rounded-full transition-all duration-100 ease-linear"
-                style={{
-                  height: `${progress}%`,
-                }}
-              />
-            </div>
-            
-            {/* Quadrados como checkpoints conectados à barra */}
-            <div className="flex flex-col justify-between ml-4" style={{ height: '240px' }}>
-              {banners.map((banner, index) => {
-                const isActive = index === currentIndex;
-                const isPassed = index < currentIndex;
-                const isInProgress = index === currentIndex && progress > 0;
-                
-                return (
-                  <div
-                    key={banner.id}
-                    className={`w-12 h-12 rounded-lg border-2 transition-all duration-300 ${
-                      isActive || isPassed
-                        ? 'border-capiva-orange bg-capiva-orange'
-                        : 'border-gray-300 bg-white'
-                    }`}
-                    style={{
-                      marginTop: index === 0 ? '0px' : undefined,
-                      marginBottom: index === banners.length - 1 ? '0px' : undefined
-                    }}
-                  />
-                );
-              })}
+            {/* Container combinado para barra e quadrados */}
+            <div className="relative">
+              {/* Barra vertical laranja */}
+              <div className="relative w-1 bg-gray-200 rounded-full overflow-hidden" style={{ height: '240px' }}>
+                <div 
+                  className="absolute top-0 left-0 w-full bg-capiva-orange rounded-full transition-all duration-100 ease-linear"
+                  style={{
+                    height: `${progress}%`,
+                  }}
+                />
+              </div>
+              
+              {/* Quadrados posicionados sobre a barra */}
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-col justify-between" style={{ height: '240px' }}>
+                {banners.map((banner, index) => {
+                  const isActive = index === currentIndex;
+                  const isPassed = index < currentIndex;
+                  
+                  return (
+                    <div
+                      key={banner.id}
+                      className={`w-3 h-3 rounded-sm border-2 transition-all duration-300 ${
+                        isActive || isPassed
+                          ? 'border-capiva-orange bg-capiva-orange'
+                          : 'border-gray-300 bg-white'
+                      }`}
+                      style={{
+                        marginTop: index === 0 ? '-6px' : undefined,
+                        marginBottom: index === banners.length - 1 ? '-6px' : undefined
+                      }}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
 
