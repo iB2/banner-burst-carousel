@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface Banner {
   id: number;
@@ -37,52 +37,71 @@ const VerticalCarousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isWaiting, setIsWaiting] = useState(false);
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const clearAllTimers = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    timeoutsRef.current = [];
+  };
 
   useEffect(() => {
-    let progressInterval: NodeJS.Timeout;
-    let bannerChangeTimeout1: NodeJS.Timeout;
-    let bannerChangeTimeout2: NodeJS.Timeout;
-    let resetTimeout: NodeJS.Timeout;
-
-    const startProgress = () => {
-      setProgress(0);
-      setIsWaiting(false);
-      setCurrentIndex(0);
+    const startCycle = () => {
+      console.log('Iniciando novo ciclo');
+      clearAllTimers();
       
-      // Animate progress from 0 to 100 over 10 seconds
-      progressInterval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            return 100;
+      // Reset inicial
+      setProgress(0);
+      setCurrentIndex(0);
+      setIsWaiting(false);
+      
+      // Progresso da barra (10 segundos total)
+      let progressValue = 0;
+      intervalRef.current = setInterval(() => {
+        progressValue += 1; // 1% por 100ms = 10 segundos total
+        setProgress(progressValue);
+        
+        console.log(`Progresso: ${progressValue}%`);
+        
+        if (progressValue >= 100) {
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
           }
-          return prev + (100 / 100); // 100 steps for smooth animation (10000ms / 100ms)
-        });
+        }
       }, 100);
 
-      // Change to second banner after 5 seconds (50% progress)
-      bannerChangeTimeout1 = setTimeout(() => {
+      // Mudança para o segundo banner aos 5 segundos (50% do progresso)
+      const timeout1 = setTimeout(() => {
+        console.log('Mudando para banner 2');
         setCurrentIndex(1);
       }, 5000);
+      timeoutsRef.current.push(timeout1);
 
-      // Change to third banner after 10 seconds (100% progress)
-      bannerChangeTimeout2 = setTimeout(() => {
+      // Mudança para o terceiro banner aos 10 segundos (100% do progresso)
+      const timeout2 = setTimeout(() => {
+        console.log('Mudando para banner 3 - iniciando espera');
         setCurrentIndex(2);
         setIsWaiting(true);
       }, 10000);
+      timeoutsRef.current.push(timeout2);
 
-      // Reset after 15 seconds total (10s progress + 5s waiting)
-      resetTimeout = setTimeout(() => {
-        startProgress();
+      // Reset completo após 15 segundos (10s progresso + 5s espera)
+      const timeout3 = setTimeout(() => {
+        console.log('Resetando ciclo completo');
+        startCycle(); // Reinicia o ciclo
       }, 15000);
+      timeoutsRef.current.push(timeout3);
     };
 
-    startProgress();
+    startCycle();
 
     return () => {
-      clearInterval(progressInterval);
-      clearTimeout(bannerChangeTimeout1);
-      clearTimeout(bannerChangeTimeout2);
-      clearTimeout(resetTimeout);
+      clearAllTimers();
     };
   }, []);
 
